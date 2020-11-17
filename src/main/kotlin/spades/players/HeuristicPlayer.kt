@@ -4,7 +4,11 @@ import spades.engine.*
 import spades.utils.allCards
 import kotlin.math.min
 
-abstract class HeuristicPlayer(override val username: String) : Player() {
+abstract class HeuristicPlayer(
+    override val username: String,
+    aggressiveness: Double = 0.5,
+    matchPartnerAggressiveness: Boolean = true
+) : Player(aggressiveness, matchPartnerAggressiveness) {
     val cardsLeftInDeck by lazy {
         val cards = allCards.toMutableList()
 
@@ -21,7 +25,7 @@ abstract class HeuristicPlayer(override val username: String) : Player() {
         val suitValues = mutableListOf<Pair<Card, Int>>()
         hand.cardsLeft.forEach { playerCard ->
             val suit = cardsLeftInDeck.getValue(playerCard.suit).sortedByDescending { it.value.rawValue }
-            suitValues.add(playerCard to suit.indexOf(playerCard)+ 1)
+            suitValues.add(playerCard to suit.indexOf(playerCard) + 1)
         }
 
         return suitValues
@@ -69,7 +73,7 @@ abstract class HeuristicPlayer(override val username: String) : Player() {
             }
 
 
-        var expectedMadeRoundedDown = expectedMade.toInt() - 2
+        var expectedMadeRoundedDown = (expectedMade.toInt() - 2.0 * (1.0 - aggressiveness / 2.0)).toInt()
         if (expectedMadeRoundedDown < 1) expectedMadeRoundedDown = 1
         // println("Betting for $username: $expectedMadeRoundedDown")
         return if (expectedMadeRoundedDown == 0) null
@@ -89,6 +93,14 @@ abstract class HeuristicPlayer(override val username: String) : Player() {
     }
 
     override fun onRoundEnd(round: Round) {
+        if (matchPartnerAggressiveness) {
+            val bet = round.getBets().getValue(partner).toDouble()
+            val made = round.getTricksWonByPlayer().getValue(partner).size.toDouble()
+
+            aggressiveness =
+                if (bet == made) 0.5
+                else 1.0 - (made / bet) / 2.0
+        }
     }
 
     override fun onGameEnd(game: SpadesGame) {

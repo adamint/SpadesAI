@@ -15,8 +15,8 @@ fun main() {
     engine.startGame()*/
 
     val teams = listOf(
-        //(1..2).map { DecisionTreePlayer("DecisionTreePlayer$it") } + (1..2).map { BasicHeuristicPlayer("HeuristicPlayer$it") },
-        //(1..2).map { RandomPlayer("RandomPlayer$it") } + (1..2).map { BasicHeuristicPlayer("HeuristicPlayer$it") },
+        (1..2).map { DecisionTreePlayer("DecisionTreePlayer$it") } + (1..2).map { BasicHeuristicPlayer("HeuristicPlayer$it") },
+        (1..2).map { RandomPlayer("RandomPlayer$it") } + (1..2).map { BasicHeuristicPlayer("HeuristicPlayer$it") },
             (1..2).map { RandomPlayer("RandomPlayer$it") } + (1..2).map { DecisionTreePlayer("DecisionTreePlayer$it") }
 
     )
@@ -24,7 +24,7 @@ fun main() {
     teams.forEach { team ->
         var teamOneWins = 0
 
-        val repeats = 25
+        val repeats = 100
         for (i in 1..repeats) {
             val engine = SpadesEngine()
             engine.teamOne += listOf(team[0], team[1])

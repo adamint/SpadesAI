@@ -3,7 +3,7 @@ package spades.players
 import spades.engine.*
 import kotlin.properties.Delegates
 
-abstract class Player {
+abstract class Player(var aggressiveness: Double = 0.5, var matchPartnerAggressiveness: Boolean) {
     abstract val username: String
     abstract fun onTrickStart(trick: Trick)
     abstract fun onRoundStart()

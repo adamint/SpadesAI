@@ -2,7 +2,11 @@ package spades.players
 
 import spades.engine.*
 
-data class ManualPlayer(override val username: String): Player() {
+class ManualPlayer(
+    override val username: String,
+    aggressiveness: Double = 0.5,
+    matchPartnerAggressiveness: Boolean = true
+): Player(aggressiveness, matchPartnerAggressiveness) {
     override fun onOtherCardPlayed(card: Card, player: Player, trick: Trick) {
         println("Card played: $card, by player $player")
     }

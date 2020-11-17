@@ -12,7 +12,11 @@ class RandomPlayer(username: String) : HeuristicPlayer(username) {
     }
 }
 
-open class BasicHeuristicPlayer(username: String) : HeuristicPlayer(username) {
+open class BasicHeuristicPlayer(
+    username: String,
+    aggressiveness: Double = 0.5,
+    matchPartnerAggressiveness: Boolean = true
+) : HeuristicPlayer(username, aggressiveness, matchPartnerAggressiveness) {
     override fun onTurnRequested(hand: Hand, trick: Trick): Card {
         val round = trick.round
         val cardValues = getHandByRemainingSuitValue()
@@ -63,7 +67,11 @@ open class BasicHeuristicPlayer(username: String) : HeuristicPlayer(username) {
     }
 }
 
-class DecisionTreePlayer(username: String) : BasicHeuristicPlayer(username) {
+class DecisionTreePlayer(
+    username: String,
+    aggressiveness: Double = 0.5,
+    matchPartnerAggressiveness: Boolean = true
+) : BasicHeuristicPlayer(username, aggressiveness, matchPartnerAggressiveness) {
     val root = decisionTreeRoot
     override fun onTurnRequested(hand: Hand, trick: Trick): Card {
         return root.classify(hand, trick, trick.round)

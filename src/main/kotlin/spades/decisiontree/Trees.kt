@@ -58,7 +58,7 @@ class IsTeammateLikelyToWin : DecisionNode<Card>(children = listOf(maximizeGain,
     override fun classifyImpl(hand: Hand, trick: Trick, round: Round): Card {
         if (round.teamOneMade.sum() >= round.teamOneBet.sum()) return maximizeLoss.classify(hand, trick, round)
 
-        val aggressiveness = 0.5
+        val aggressiveness = hand.player.aggressiveness
 
         val myTurnIndex = trick.turnOrder.indexOf(hand.player)
 

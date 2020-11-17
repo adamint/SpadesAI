@@ -2,7 +2,7 @@ package spades.players
 
 import spades.engine.*
 
-abstract class GameObserver(override val username: String) : Player()
+abstract class GameObserver(override val username: String) : Player(matchPartnerAggressiveness = false)
 
 class TotalGameObserver(override val username: String): GameObserver(username) {
     override fun onTrickStart(trick: Trick) {
