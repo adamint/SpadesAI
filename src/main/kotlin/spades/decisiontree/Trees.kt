@@ -1,12 +1,11 @@
 package spades.decisiontree
 
-import hu.webarticum.treeprinter.ListingTreePrinter
 import hu.webarticum.treeprinter.TraditionalTreePrinter
 import org.apache.commons.math3.distribution.NormalDistribution
-import spades.models.Card
-import spades.models.Hand
-import spades.models.Round
-import spades.models.Trick
+import spades.engine.Card
+import spades.engine.Hand
+import spades.engine.Round
+import spades.engine.Trick
 import spades.players.HeuristicPlayer
 import spades.utils.sum
 
@@ -106,7 +105,19 @@ class IsTeammateLikelyToWin : DecisionNode<Card>(children = listOf(maximizeGain,
 }
 
 
+fun <T> DecisionNode<T>.getAllWithChildren(): List<DecisionNode<T>> {
+    return when {
+        children.isEmpty() -> listOf(this)
+        else -> children.map { it.getAllWithChildren() }.flatten() + this
+    }
+}
+
 fun main() {
     //println(NormalDistribution(3.25, 1.0).cumulativeProbability(5.0))
-    ListingTreePrinter().print((decisionTreeRoot.getPrintableNode()))
+    TraditionalTreePrinter().print((decisionTreeRoot.getPrintableNode()))
+    decisionTreeRoot.getAllWithChildren()
+        .filter { it.readableName != it::class.simpleName }
+        .distinct()
+        .map { "${it.readableName} = ${it::class.simpleName}" }
+        .forEach { println(it) }
 }

@@ -1,8 +1,8 @@
 package spades.utils
 
-import spades.models.Card
-import spades.models.CardSuit
-import spades.models.CardValue
+import spades.engine.Card
+import spades.engine.CardSuit
+import spades.engine.CardValue
 
 val allCards = CardSuit.values().map { suit ->
     CardValue.values().map { value ->

@@ -16,6 +16,6 @@ class SpadesEngineTest {
 
         engine.pointsToWin = 250
 
-        engine.startGame()
+        engine.startNewGame()
     }
 }

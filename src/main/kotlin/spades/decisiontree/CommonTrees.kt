@@ -1,6 +1,6 @@
 package spades.decisiontree
 
-import spades.models.*
+import spades.engine.*
 
 // loss minimization
 val minimizeLossInSuit = MinimizeLossInSuit()

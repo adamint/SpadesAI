@@ -1,4 +1,4 @@
-package spades.models
+package spades.engine
 
 import spades.utils.BetConstants
 import spades.utils.sum

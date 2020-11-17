@@ -1,7 +1,7 @@
 package spades.utils
 
-import spades.models.Hand
-import spades.models.SpadesGame
+import spades.engine.Hand
+import spades.engine.SpadesGame
 import spades.players.Player
 import kotlin.random.Random
 

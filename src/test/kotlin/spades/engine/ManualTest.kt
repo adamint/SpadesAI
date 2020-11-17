@@ -25,7 +25,7 @@ fun main() {
         engine.teamTwo += listOf(randoms[2], randoms[3])
         engine.pointsToWin = 250
         engine.observers += TotalGameObserver("TGO1")
-        engine.startGame()
+        engine.startNewGame()
         if (engine.game.winner == engine.teamOne) teamOneWins++
     }
 

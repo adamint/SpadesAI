@@ -1,6 +1,6 @@
 package spades.players
 
-import spades.models.*
+import spades.engine.*
 
 data class ManualPlayer(override val username: String): Player() {
     override fun onOtherCardPlayed(card: Card, player: Player, trick: Trick) {

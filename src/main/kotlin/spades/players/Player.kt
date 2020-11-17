@@ -1,6 +1,6 @@
 package spades.players
 
-import spades.models.*
+import spades.engine.*
 import kotlin.properties.Delegates
 
 abstract class Player {
@@ -30,7 +30,7 @@ abstract class Player {
 
     override fun toString(): String = username
 
-    lateinit var hand: Hand
-    lateinit var partner: Player
+    @Transient lateinit var hand: Hand
+    @Transient lateinit var partner: Player
     var teamIndex by Delegates.notNull<Int>()
 }

@@ -1,8 +1,8 @@
 package spades.engine
 
-import spades.players.Player
-import spades.models.SpadesGame
+import com.google.gson.Gson
 import spades.players.GameObserver
+import spades.players.Player
 import spades.utils.generateRandomPlayerOrder
 
 class SpadesEngine {
@@ -21,29 +21,29 @@ class SpadesEngine {
         if (team.size == 2) throw IllegalArgumentException()
         team.add(player)
 
-        if (teamOne.size == 2 && teamTwo.size == 2) startGame()
+        if (teamOne.size == 2 && teamTwo.size == 2) startNewGame()
     }
 
-    fun traceGame() {
+    fun traceGame(traceString: String) {
+        val trace = Gson().fromJson(traceString, Trace::class.java)
+        startNewGame(Trace(trace.cardsPlayed, trace.hands, trace.startingDealerUsername, trace.playerOrderUsernames))
+    }
+
+    fun startNewGame(trace: Trace? = null) {
+        val playerOrderingString = if (!this::playerOrdering.isInitialized) {
+            trace?.playerOrderUsernames ?: generateRandomPlayerOrder(teamOne, teamTwo).map { it.username }
+        } else playerOrdering.map { it.username }
+
         game = SpadesGame(
             teamOne,
             teamTwo,
-            playerOrdering,
+            playerOrderingString,
             observers,
-            pointsToWin
+            pointsToWin,
+            trace
         )
-    }
 
-    fun startGame() {
-        if (!this::playerOrdering.isInitialized) playerOrdering = generateRandomPlayerOrder(teamOne, teamTwo)
-
-        game = SpadesGame(
-            teamOne,
-            teamTwo,
-            playerOrdering,
-            observers,
-            pointsToWin
-        )
+        trace?.let { it.game = game }
 
         game.onStart()
     }

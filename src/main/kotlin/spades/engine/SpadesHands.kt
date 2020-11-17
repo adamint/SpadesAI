@@ -1,4 +1,4 @@
-package spades.models
+package spades.engine
 
 import spades.players.Player
 import spades.utils.generateHands
@@ -95,7 +95,9 @@ data class Round(val hands: Map<Player, Hand>, val dealer: Player, @Transient va
         ) {
             game.onEnd()
         } else {
-            game.currentRound = Round(currentTrick.turnOrder.generateHands(), dealer, game)
+            game.currentRound = Round(
+                if (game.trace?.handsLeft?.isNotEmpty() == true) game.trace.handsLeft.removeFirst() else currentTrick.turnOrder.generateHands(),
+                dealer, game)
         }
     }
 }
@@ -122,8 +124,8 @@ data class Trick(val starter: Player, @Transient val round: Round) : GameEvent {
             turnOrder.without(playingPlayer).withObservers(round.game)
                 .forEach { player -> player.onOtherTurnRequested(playingPlayer, this) }
             try {
-                val card = if (round.game.traceCardsLeft != null && round.game.traceCardsLeft.isNotEmpty()) {
-                    round.game.traceCardsLeft.poll()
+                val card = if (round.game.trace != null && round.game.trace.cardsPlayedLeft.isNotEmpty()) {
+                    round.game.trace.cardsPlayedLeft.removeFirst()
                 } else playingPlayer.onTurnRequested(playerHand, this)
                 playerHand.playCard(card, this)
 
@@ -165,10 +167,9 @@ data class Hand(val cards: List<Card>, val player: Player) {
     }
 
     fun playCard(card: Card, trick: Trick) {
-        if (trick.currentTurn != player) throw IllegalStateException()
-        if (card !in cardsLeft) throw IllegalArgumentException()
-        if (card !in getValidCardsForTrick(trick)) throw IllegalArgumentException()
-
+        if (trick.currentTurn != player) throw IllegalStateException(card.toString())
+        if (card !in cardsLeft) throw IllegalArgumentException(card.toString())
+        if (card !in getValidCardsForTrick(trick)) throw IllegalArgumentException(card.toString())
         if (card.suit == CardSuit.SPADES && !trick.round.spadesEnabled) trick.round.spadesEnabled = true
         trick.playedCards.add(card)
         cardsLeft.remove(card)

@@ -1,6 +1,6 @@
 package spades.players
 
-import spades.models.*
+import spades.engine.*
 
 abstract class GameObserver(override val username: String) : Player()
 
