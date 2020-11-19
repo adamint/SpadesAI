@@ -10,4 +10,4 @@ Please see src/test/kotlin/spades/engine/Tests.kt to understand how to create te
 
 Build and run:
 - In IntelliJ IDEA, make sure "Kotlin" plugin is installed and Java is available. Go to src/test/kotlin/spades/engine/Tests.kt 
-and click the green Run (play) button next to fun main in the file to run tests.
+and click the green Run (play) button next to fun main in the file to run tests. Kotlin 1.4 is required, JDK >= 8.
